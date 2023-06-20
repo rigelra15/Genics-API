@@ -24,7 +24,7 @@ const getProducts = async (req, res) => {
 const saveProduct = async (req, res) => {
   try {
     const product = new Product(req.body);
-    const savedProduct = await Product.save();
+    const savedProduct = await product.save();
 
     res.status(201).json({
       message: "Save product success",
@@ -45,6 +45,13 @@ const updateProduct = async (req, res) => {
     const updatedProduct = await Product.findByIdAndUpdate(productId, req.body, {
       new: true
     })
+
+    if (!updatedProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found"
+      })
+    }
 
     res.status(200).json({
       message: "Update product success",
